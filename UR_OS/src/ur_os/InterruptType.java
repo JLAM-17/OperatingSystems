@@ -13,5 +13,5 @@ public enum InterruptType {
     IO,
     SCHEDULER_CPU_TO_RQ,
     SCHEDULER_RQ_TO_CPU,
-    
+
 }

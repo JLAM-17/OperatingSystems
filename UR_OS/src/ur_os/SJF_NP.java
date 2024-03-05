@@ -8,23 +8,23 @@ package ur_os;
  *
  * @author prestamour
  */
-public class SJF_NP extends Scheduler{
+public class SJF_NP extends Scheduler {
 
-    
-    SJF_NP(OS os){
+    SJF_NP(OS os) {
         super(os);
     }
-    
-   
-    @Override
-    public void getNext(boolean cpuEmpty) {
-        
-    }
-    
-    @Override
-    public void newProcess(boolean cpuEmpty) {} //Non-preemtive
 
     @Override
-    public void IOReturningProcess(boolean cpuEmpty) {} //Non-preemtive
-    
+    public void getNext(boolean cpuEmpty) {
+
+    }
+
+    @Override
+    public void newProcess(boolean cpuEmpty) {
+    } // Non-preemtive
+
+    @Override
+    public void IOReturningProcess(boolean cpuEmpty) {
+    } // Non-preemtive
+
 }

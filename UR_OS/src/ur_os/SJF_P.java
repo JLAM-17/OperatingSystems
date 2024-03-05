@@ -12,38 +12,66 @@ import java.util.PriorityQueue;
  * @author prestamour
  */
 public class SJF_P extends Scheduler {
-    private PriorityQueue<Process> RQ;
 
     SJF_P(OS os) {
         super(os);
-        RQ = new PriorityQueue<>(Comparator.comparingInt(Process::getRemainingTimeInCurrentBurst));
-        RQ.addAll(processes);
     }
 
     @Override
-    public void newProcess(boolean cpuEmpty) {// When a NEW process enters the queue, process in CPU, if any, is
-                                              // extracted to compete with the rest
+    // When a NEW process enters the queue, process in CPU, if any, is extracted to
+    // compete with the rest
+    public void newProcess(boolean cpuEmpty) {
+
+        if (processes.isEmpty()) {
+            return;
+        }
+
+        if (!cpuEmpty) {
+            Process arrivingProcess = processes.getLast();
+            Process currentProcess = os.cpu.extractProcess();
+
+            if (arrivingProcess.getRemainingTimeInCurrentBurst() < currentProcess
+                    .getRemainingTimeInCurrentBurst()) {
+                os.interrupt(InterruptType.SCHEDULER_CPU_TO_RQ, arrivingProcess);
+            }
+        } else {
+            // if cpu is empty and there are processes in the rq
+            int cont = 100000; // crazy high number
+            Process targetProcess = null;
+
+            for (Process p : processes) {
+                int temp = p.getRemainingTimeInCurrentBurst();
+                if (temp < cont) {
+                    cont = temp;
+                    targetProcess = p;
+                }
+            }
+            os.interrupt(InterruptType.SCHEDULER_RQ_TO_CPU, targetProcess);
+        }
 
     }
 
     @Override
-    public void IOReturningProcess(boolean cpuEmpty) {// When a process return from IO and enters the queue, process in
+    public void IOReturningProcess(boolean cpuEmpty) {// When a process returns from IO and enters the queue, process in
                                                       // CPU, if any, is extracted to compete with the rest
+        if (!cpuEmpty) {
+            int cont = 100000; // crazy high number
+            Process targetProcess = null;
 
+            for (Process p : processes) {
+                int temp = p.getRemainingTimeInCurrentBurst();
+                if (temp < cont) {
+                    cont = temp;
+                    targetProcess = p;
+                }
+            }
+            os.interrupt(InterruptType.SCHEDULER_RQ_TO_CPU, targetProcess);
+
+        }
     }
 
     @Override
     public void getNext(boolean cpuEmpty) {
-        if (!processes.isEmpty()) {
-            Process arrivingProcess = processes.getFirst();
-            Process currentProcess = os.cpu.extractProcess();
 
-            if (cpuEmpty || arrivingProcess.getRemainingTimeInCurrentBurst() < currentProcess
-                    .getRemainingTimeInCurrentBurst()) {
-                os.interrupt(InterruptType.SCHEDULER_RQ_TO_CPU, processes.removeFirst());
-            } else {
-                os.interrupt(InterruptType.SCHEDULER_CPU_TO_RQ, arrivingProcess);
-            }
-        }
     }
 }

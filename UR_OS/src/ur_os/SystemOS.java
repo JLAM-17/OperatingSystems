@@ -14,8 +14,8 @@ import java.util.Set;
  *
  * @author super
  */
-public class SystemOS implements Runnable{
-    
+public class SystemOS implements Runnable {
+
     private static int clock = 0;
     private static final int MAX_SIM_CYCLES = 30;
     private static final int MAX_SIM_PROC_CREATION_TIME = 50;
@@ -24,7 +24,7 @@ public class SystemOS implements Runnable{
     private OS os;
     private CPU cpu;
     private IOQueue ioq;
-    
+
     protected ArrayList<Process> processes;
     ArrayList<Integer> execution;
 
@@ -36,33 +36,33 @@ public class SystemOS implements Runnable{
         ioq.setOS(os);
         execution = new ArrayList();
         processes = new ArrayList();
-        //initSimulationQueue();
+        // initSimulationQueue();
         initSimulationQueueSimple();
         showProcesses();
     }
-    
-    public int getTime(){
+
+    public int getTime() {
         return clock;
     }
-    
-    public ArrayList<Process> getProcessAtI(int i){
+
+    public ArrayList<Process> getProcessAtI(int i) {
         ArrayList<Process> ps = new ArrayList();
-        
+
         for (Process process : processes) {
-            if(process.getTime_init() == i){
+            if (process.getTime_init() == i) {
                 ps.add(process);
             }
         }
-        
+
         return ps;
     }
 
-    public void initSimulationQueue(){
+    public void initSimulationQueue() {
         double tp;
         Process p;
         for (int i = 0; i < MAX_SIM_PROC_CREATION_TIME; i++) {
             tp = r.nextDouble();
-            if(PROB_PROC_CREATION >= tp){
+            if (PROB_PROC_CREATION >= tp) {
                 p = new Process();
                 p.setTime_init(clock);
                 processes.add(p);
@@ -71,13 +71,13 @@ public class SystemOS implements Runnable{
         }
         clock = 0;
     }
-    
-    public void initSimulationQueueSimple(){
+
+    public void initSimulationQueueSimple() {
         Process p;
         int cont = 0;
         for (int i = 0; i < MAX_SIM_PROC_CREATION_TIME; i++) {
-            if(i % 4 == 0){
-                p = new Process(cont++,-1);
+            if (i % 4 == 0) {
+                p = new Process(cont++, -1);
                 p.setTime_init(clock);
                 processes.add(p);
             }
@@ -85,89 +85,91 @@ public class SystemOS implements Runnable{
         }
         clock = 0;
     }
-    
-    public boolean isSimulationFinished(){
-        
+
+    public boolean isSimulationFinished() {
+
         boolean finished = true;
-        
+
         for (Process p : processes) {
             finished = finished && p.isFinished();
         }
-        
+
         return finished;
-    
+
     }
-    
-    
+
     @Override
     public void run() {
         double tp;
         ArrayList<Process> ps;
-        
+
         System.out.println("******SIMULATION START******");
-        
-        int i=0;
+
+        int i = 0;
         Process temp_exec;
         int tempID;
-        while(!isSimulationFinished() && i < MAX_SIM_CYCLES){//MAX_SIM_CYCLES is the maximum simulation time, to avoid infinite loops
-            System.out.println("******Clock: "+i+"******");
+        while (!isSimulationFinished() && i < MAX_SIM_CYCLES) {// MAX_SIM_CYCLES is the maximum simulation time, to
+                                                               // avoid infinite loops
+            System.out.println("******Clock: " + i + "******");
             System.out.println(cpu);
             System.out.println(ioq);
 
-            //Crear procesos, si aplica en el ciclo actual
+            // Crear procesos, si aplica en el ciclo actual
             ps = getProcessAtI(i);
             for (Process p : ps) {
                 os.create_process(p);
-            } //If the scheduler is preemtive, this action will trigger the extraction from the CPU, is any process is there.
-            
-            //Actualizar el OS, quien va actualizar el Scheduler            
+            } // If the scheduler is preemtive, this action will trigger the extraction from
+              // the CPU, is any process is there.
+
+            // Actualizar el OS, quien va actualizar el Scheduler
             os.update();
-            //os.update() prepares the system for execution. It runs at the beginning of the cycle.
-            
+            // os.update() prepares the system for execution. It runs at the beginning of
+            // the cycle.
+
             temp_exec = cpu.getProcess();
-            if(temp_exec == null){
+            if (temp_exec == null) {
                 tempID = -1;
-            }else{
+            } else {
                 tempID = temp_exec.getPid();
             }
             execution.add(tempID);
-            
-            //Actualizar la CPU
-            cpu.update(); 
-            
-            ///Actualizar la IO
+
+            // Actualizar la CPU
+            cpu.update();
+
+            /// Actualizar la IO
             ioq.update();
-            
-            //Las actualizaciones de CPU y IO pueden generar interrupciones que actualizan a cola de listos, cuando salen los procesos
-            
+
+            // Las actualizaciones de CPU y IO pueden generar interrupciones que actualizan
+            // a cola de listos, cuando salen los procesos
+
             System.out.println("After the cycle: ");
             System.out.println(cpu);
             System.out.println(ioq);
-            
+
             i++;
             clock++;
         }
         System.out.println("******SIMULATION FINISHES******");
-        //os.showProcesses();
-        
+        // os.showProcesses();
+
         System.out.println("******Process Execution******");
         for (Integer num : execution) {
-            System.out.print(num+" ");
+            System.out.print(num + " ");
         }
         System.out.println("");
     }
-    
-    public void showProcesses(){
+
+    public void showProcesses() {
         System.out.println("Process list:");
         StringBuilder sb = new StringBuilder();
-        
+
         for (Process process : processes) {
             sb.append(process);
             sb.append("\n");
         }
-        
+
         System.out.println(sb.toString());
     }
-    
-    
+
 }

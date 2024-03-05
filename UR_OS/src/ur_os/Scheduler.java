@@ -43,6 +43,7 @@ public abstract class Scheduler {
 
         p.setState(ProcessState.READY); // If the process comes from the CPU, just add it to the list
         processes.add(p);
+        // priorityqueue.add(p)
     }
 
     public void update() {
