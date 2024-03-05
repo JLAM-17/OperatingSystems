@@ -15,51 +15,49 @@ import java.util.Set;
 public class IOQueue {
     OS os;
     protected ArrayList<Process> processes;
-    
-    
-    IOQueue(){
+
+    IOQueue() {
         processes = new ArrayList();
     }
-   
-    
-    IOQueue(OS os){
+
+    IOQueue(OS os) {
         this();
         this.os = os;
     }
-    
-     public void setOS(OS os){
+
+    public void setOS(OS os) {
         this.os = os;
     }
-    
-    public void addProcess(Process p){
+
+    public void addProcess(Process p) {
         processes.add(p);
-        if(p.getState() != ProcessState.NEW_IO)
+        if (p.getState() != ProcessState.NEW_IO)
             p.setState(ProcessState.IO);
-        
+
     }
-    
-    public void update(){
+
+    public void update() {
         Process temp;
-        for (int i=0; i< processes.size(); i++) {
-            if(processes.get(i).getState() != ProcessState.NEW_IO){
-                if(processes.get(i).advanceBurst()){//If the process finishes the current burst
+        for (int i = 0; i < processes.size(); i++) {
+            if (processes.get(i).getState() != ProcessState.NEW_IO) {
+                if (processes.get(i).advanceBurst()) {// If the process finishes the current burst
                     temp = processes.get(i);
                     processes.remove(processes.get(i));
                     os.interrupt(InterruptType.IO, temp);
                 }
-            }else{
+            } else {
                 processes.get(i).setState(ProcessState.IO);
             }
         }
     }
-    
-    public void removeProcess(Process p){
-        processes.remove(p); //The process is found thanks to the equals() method
+
+    public void removeProcess(Process p) {
+        processes.remove(p); // The process is found thanks to the equals() method
     }
-    
-    public String toString(){
-        
-        if(!processes.isEmpty()){
+
+    public String toString() {
+
+        if (!processes.isEmpty()) {
             StringBuilder sb = new StringBuilder();
             sb.append("IO: ");
             for (Process p : processes) {
@@ -68,9 +66,9 @@ public class IOQueue {
             }
 
             return sb.toString();
-        
-        }else
+
+        } else
             return "IO: Empty";
     }
-    
+
 }

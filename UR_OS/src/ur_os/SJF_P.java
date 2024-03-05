@@ -21,57 +21,49 @@ public class SJF_P extends Scheduler {
     // When a NEW process enters the queue, process in CPU, if any, is extracted to
     // compete with the rest
     public void newProcess(boolean cpuEmpty) {
-
-        if (processes.isEmpty()) {
-            return;
-        }
-
-        if (!cpuEmpty) {
-            Process arrivingProcess = processes.getLast();
-            Process currentProcess = os.cpu.extractProcess();
-
-            if (arrivingProcess.getRemainingTimeInCurrentBurst() < currentProcess
-                    .getRemainingTimeInCurrentBurst()) {
-                os.interrupt(InterruptType.SCHEDULER_CPU_TO_RQ, arrivingProcess);
-            }
-        } else {
-            // if cpu is empty and there are processes in the rq
-            int cont = 100000; // crazy high number
-            Process targetProcess = null;
-
-            for (Process p : processes) {
-                int temp = p.getRemainingTimeInCurrentBurst();
-                if (temp < cont) {
-                    cont = temp;
-                    targetProcess = p;
-                }
-            }
-            os.interrupt(InterruptType.SCHEDULER_RQ_TO_CPU, targetProcess);
-        }
-
     }
 
     @Override
     public void IOReturningProcess(boolean cpuEmpty) {// When a process returns from IO and enters the queue, process in
                                                       // CPU, if any, is extracted to compete with the rest
-        if (!cpuEmpty) {
-            int cont = 100000; // crazy high number
-            Process targetProcess = null;
+    }
 
-            for (Process p : processes) {
-                int temp = p.getRemainingTimeInCurrentBurst();
-                if (temp < cont) {
-                    cont = temp;
-                    targetProcess = p;
-                }
-            }
-            os.interrupt(InterruptType.SCHEDULER_RQ_TO_CPU, targetProcess);
-
+    private Process findShortestRemainingProcess() {
+        if (processes.isEmpty()) {
+            return null;
         }
+
+        Process shortestRBT = processes.get(0);
+        for (Process p : processes) {
+            if (p.getRemainingTimeInCurrentBurst() < shortestRBT.getRemainingTimeInCurrentBurst()) {
+                shortestRBT = p;
+            }
+        }
+        return shortestRBT;
     }
 
     @Override
+    // In case of a draw FIFO is applyed
     public void getNext(boolean cpuEmpty) {
+        if (!processes.isEmpty()) { // if there are processes in the RQ
+            if (cpuEmpty) { // CPU is empty
+                Process shortestRBTprocess = findShortestRemainingProcess();
+                if (shortestRBTprocess != null) {
+                    os.interrupt(InterruptType.SCHEDULER_RQ_TO_CPU, shortestRBTprocess);
+                }
+
+            } else { // CPU busy
+                Process arrivingProcess = findShortestRemainingProcess();
+                Process currentProcess = os.cpu.extractProcess();
+                processes.remove(currentProcess);
+                if (arrivingProcess.getRemainingTimeInCurrentBurst() < currentProcess
+                        .getRemainingTimeInCurrentBurst()) {
+                    os.interrupt(InterruptType.SCHEDULER_CPU_TO_RQ, arrivingProcess);
+                }
+
+            }
+
+        }
 
     }
 }

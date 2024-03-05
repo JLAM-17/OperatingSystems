@@ -9,7 +9,7 @@ package ur_os;
  * @author super
  */
 public class ProcessBurst {
-    
+
     int cycles;
     int remainingCycles;
     ProcessBurstType type;
@@ -19,14 +19,14 @@ public class ProcessBurst {
         this.cycles = cycles;
         this.type = type;
         remainingCycles = cycles;
-        finished =  false;
+        finished = false;
     }
-    
+
     public ProcessBurst(ProcessBurst p) {
         this.cycles = p.cycles;
         this.type = p.type;
         remainingCycles = p.remainingCycles;
-        finished =  p.finished;
+        finished = p.finished;
     }
 
     public int getCycles() {
@@ -44,30 +44,30 @@ public class ProcessBurst {
     public void setType(ProcessBurstType type) {
         this.type = type;
     }
-    
-    public boolean advanceBurst(){
-        if(remainingCycles > 0){
+
+    public boolean advanceBurst() {
+        if (remainingCycles > 0) {
             this.remainingCycles--;
-            if(remainingCycles == 0){
+            if (remainingCycles == 0) {
                 finished = true;
             }
-        }else{
+        } else {
             System.out.println("Error in burst!");
         }
-        
+
         return finished;
     }
 
     public int getRemainingCycles() {
         return remainingCycles;
     }
-    
-    public boolean isFinishes(){
+
+    public boolean isFinishes() {
         return finished;
     }
-    
-    public String toString(){
-        return "C: "+cycles+" RC: "+this.remainingCycles+" T: "+this.type+" F: "+this.finished;
+
+    public String toString() {
+        return "C: " + cycles + " RC: " + this.remainingCycles + " T: " + this.type + " F: " + this.finished;
     }
-    
+
 }

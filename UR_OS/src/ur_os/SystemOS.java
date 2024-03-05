@@ -5,6 +5,7 @@
  */
 package ur_os;
 
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
@@ -17,7 +18,7 @@ import java.util.Set;
 public class SystemOS implements Runnable {
 
     private static int clock = 0;
-    private static final int MAX_SIM_CYCLES = 30;
+    private static final int MAX_SIM_CYCLES = 15;
     private static final int MAX_SIM_PROC_CREATION_TIME = 50;
     private static final double PROB_PROC_CREATION = 0.1;
     private static Random r = new Random(1235);
@@ -37,7 +38,8 @@ public class SystemOS implements Runnable {
         execution = new ArrayList();
         processes = new ArrayList();
         // initSimulationQueue();
-        initSimulationQueueSimple();
+        // initSimulationQueueSimple();
+        initSimulationControlled();
         showProcesses();
     }
 
@@ -86,6 +88,17 @@ public class SystemOS implements Runnable {
         clock = 0;
     }
 
+    public void initSimulationControlled() {
+        Process p;
+        p = new Process(0, 0, 2, 1, 3);
+        processes.add(p);
+        p = new Process(0, 2, 3, 1, 2);
+        processes.add(p);
+        p = new Process(0, 3, 2, 1, 1);
+        processes.add(p);
+
+    }
+
     public boolean isSimulationFinished() {
 
         boolean finished = true;
@@ -111,8 +124,12 @@ public class SystemOS implements Runnable {
         while (!isSimulationFinished() && i < MAX_SIM_CYCLES) {// MAX_SIM_CYCLES is the maximum simulation time, to
                                                                // avoid infinite loops
             System.out.println("******Clock: " + i + "******");
-            System.out.println(cpu);
-            System.out.println(ioq);
+            // System.out.println(cpu);
+            // System.out.println(ioq);
+
+            if (i == 4) {
+                System.out.print("");
+            }
 
             // Crear procesos, si aplica en el ciclo actual
             ps = getProcessAtI(i);
@@ -140,15 +157,23 @@ public class SystemOS implements Runnable {
             /// Actualizar la IO
             ioq.update();
 
+            // REVISAR PROBLEMA DE DEPENDENCIA ENTRE IO Y CPU EN EL MISMO CICLO!!!
+
             // Las actualizaciones de CPU y IO pueden generar interrupciones que actualizan
             // a cola de listos, cuando salen los procesos
 
-            System.out.println("After the cycle: ");
+            Console console = System.console();
+            console.printf("\u001B[31mAfter the cycle: \u001B[0m%n");
             System.out.println(cpu);
             System.out.println(ioq);
 
             i++;
             clock++;
+
+            for (Integer num : execution) {
+                System.out.print(num + " ");
+            }
+            System.out.println("");
         }
         System.out.println("******SIMULATION FINISHES******");
         // os.showProcesses();
