@@ -32,7 +32,6 @@ public class SJF_P extends Scheduler {
         if (processes.isEmpty()) {
             return null;
         }
-
         Process shortestRBT = processes.get(0);
         for (Process p : processes) {
             if (p.getRemainingTimeInCurrentBurst() < shortestRBT.getRemainingTimeInCurrentBurst()) {
@@ -53,12 +52,13 @@ public class SJF_P extends Scheduler {
                 }
 
             } else { // CPU busy
-                Process arrivingProcess = findShortestRemainingProcess();
-                Process currentProcess = os.cpu.extractProcess();
-                processes.remove(currentProcess);
-                if (arrivingProcess.getRemainingTimeInCurrentBurst() < currentProcess
-                        .getRemainingTimeInCurrentBurst()) {
-                    os.interrupt(InterruptType.SCHEDULER_CPU_TO_RQ, arrivingProcess);
+                int currentCPUProcessID = os.cpu.cpuprocess().getPid();
+                // if the process with the shortest remaining time in the current burst is the
+                // one on the CPU dont take it out
+                if (currentCPUProcessID == findShortestRemainingProcess().getPid()) {
+                    // leave it there
+                } else {
+                    os.interrupt(InterruptType.SCHEDULER_CPU_TO_RQ, findShortestRemainingProcess());
                 }
 
             }
@@ -66,4 +66,5 @@ public class SJF_P extends Scheduler {
         }
 
     }
+
 }
