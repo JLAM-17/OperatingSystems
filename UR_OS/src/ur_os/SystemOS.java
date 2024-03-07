@@ -127,7 +127,7 @@ public class SystemOS implements Runnable {
             // System.out.println(cpu);
             // System.out.println(ioq);
 
-            if (i == 4) {
+            if (i == 3) {
                 System.out.print("");
             }
 

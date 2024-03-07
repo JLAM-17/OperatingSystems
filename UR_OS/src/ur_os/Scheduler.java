@@ -47,9 +47,7 @@ public abstract class Scheduler {
     }
 
     public void update() {
-        if (processes.size() > 0) {
-            getNext(os.isCPUEmpty());
-        }
+        getNext(os.isCPUEmpty());
     }
 
     public Process removeProcess(Process p) {
