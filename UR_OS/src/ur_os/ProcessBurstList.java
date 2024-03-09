@@ -65,7 +65,7 @@ public class ProcessBurstList {
             System.out.println("Error in burst addition");
     }
 
-    private ArrayList<ProcessBurst> getList() {
+    public ArrayList<ProcessBurst> getList() {
         return this.bursts;
     }
 

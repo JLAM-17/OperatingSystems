@@ -56,14 +56,13 @@ public class SJF_P extends Scheduler {
                 }
 
             } else { // CPU busy
-                int currentRemainingTimeOfCpuProcess = os.cpu.cpuprocess().getRemainingTimeInCurrentBurst();
+                int currentRemainingTimeOfCpuProcess = os.cpu.getProcess().getRemainingTimeInCurrentBurst();
 
                 Process shortestProcessInRq = findShortestRemainingProcess();
 
                 if (currentRemainingTimeOfCpuProcess > shortestProcessInRq.getRemainingTimeInCurrentBurst()) {
                     os.interrupt(InterruptType.SCHEDULER_CPU_TO_RQ, shortestProcessInRq);
                 }
-
             }
 
         }

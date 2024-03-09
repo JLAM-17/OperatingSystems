@@ -61,10 +61,6 @@ public class CPU {
         return temp;
     }
 
-    public Process cpuprocess() {
-        return p;
-    }
-
     public String toString() {
         if (!isEmpty())
             return "CPU: " + p.toString();

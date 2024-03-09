@@ -8,6 +8,7 @@ package ur_os;
 import java.io.Console;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -26,7 +27,9 @@ public class SystemOS implements Runnable {
     private CPU cpu;
     private IOQueue ioq;
 
+    protected Scheduler s;
     protected ArrayList<Process> processes;
+
     ArrayList<Integer> execution;
 
     public SystemOS() {
@@ -39,7 +42,7 @@ public class SystemOS implements Runnable {
         processes = new ArrayList();
         // initSimulationQueue();
         // initSimulationQueueSimple();
-        initSimulationControlled();
+        initSimulationsumrolled();
         showProcesses();
     }
 
@@ -76,10 +79,10 @@ public class SystemOS implements Runnable {
 
     public void initSimulationQueueSimple() {
         Process p;
-        int cont = 0;
+        int sum = 0;
         for (int i = 0; i < MAX_SIM_PROC_CREATION_TIME; i++) {
             if (i % 4 == 0) {
-                p = new Process(cont++, -1);
+                p = new Process(sum++, -1);
                 p.setTime_init(clock);
                 processes.add(p);
             }
@@ -88,7 +91,7 @@ public class SystemOS implements Runnable {
         clock = 0;
     }
 
-    public void initSimulationControlled() {
+    public void initSimulationsumrolled() {
         Process p;
         p = new Process(0, 0, 2, 1, 3);
         processes.add(p);
@@ -183,6 +186,51 @@ public class SystemOS implements Runnable {
             System.out.print(num + " ");
         }
         System.out.println("");
+
+        // Calculation of stats here
+        int numberProcesses = processes.size();
+        double idleCpuCycles = execution.stream().filter(element -> element == -1).count(); // counts the -1 in execution
+        int totalCpuCycles = execution.size();
+        int cpuBusyCycles = totalCpuCycles - (int) idleCpuCycles;
+        double Throughput = (double) numberProcesses / cpuBusyCycles;
+        double cpuUtilization = cpuBusyCycles / totalCpuCycles;
+        List<Integer> turnaroundsPerProcess = new ArrayList<>();
+        List<Integer> waitingTimePerProcess = new ArrayList<>();
+
+        for (Process p : processes) {
+            int turnaround = p.getTime_finished() - p.getTime_init();
+            turnaroundsPerProcess.add(turnaround);
+            ArrayList<ProcessBurst> bursts = p.getPBL().getList();
+            int cyclesCont = turnaround;
+            for (ProcessBurst burst : bursts) {
+                cyclesCont = cyclesCont - burst.getCycles();
+            }
+            waitingTimePerProcess.add(cyclesCont);
+        }
+        
+        int previousProcess = -1; // cpu starts idle
+        int contextSwitches = 0;
+
+        for (int p : execution) {
+            if (p != previousProcess && p != -1) {
+                contextSwitches++;
+            }
+            previousProcess = p;
+
+        }
+
+        int sumTurnaroundsPerProcess = turnaroundsPerProcess.stream().mapToInt(Integer::intValue).sum();
+        int sumWaitingTimePerProcess = waitingTimePerProcess.stream().mapToInt(Integer::intValue).sum();
+        double turnaroundTime = (double) sumTurnaroundsPerProcess / numberProcesses;
+        double waitingTime = (double) sumWaitingTimePerProcess / numberProcesses;
+
+        System.out.println(" ");
+        System.out.println("******Simulation Statistics******");
+        System.out.println("CPU Utilization: " + cpuUtilization);
+        System.out.println("Turnaround Time: " + turnaroundTime);
+        System.out.println("Throughput: " + Throughput);
+        System.out.println("Waiting Time: " + waitingTime);
+        System.out.println("Context Switches: " + contextSwitches);
     }
 
     public void showProcesses() {

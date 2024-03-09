@@ -67,4 +67,8 @@ public abstract class Scheduler {
         return sb.toString();
     }
 
+    public double calculateTurnaroundTime(Process p) {
+        return p.getTime_finished() - p.getTime_init();
+    }
+
 }

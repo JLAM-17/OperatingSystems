@@ -19,6 +19,8 @@ public class Process implements Comparable {
     ProcessBurstList pbl;
     ProcessState state;
 
+    private double TurnaroundTime;
+
     public Process() {
         pid = -1;
         time_init = 0;
@@ -62,6 +64,7 @@ public class Process implements Comparable {
 
     public void setTime_finished(int time_finished) {
         this.time_finished = time_finished;
+        this.TurnaroundTime = time_finished - time_init;
     }
 
     public int getPid() {
@@ -74,6 +77,11 @@ public class Process implements Comparable {
 
     public int getTime_init() {
         return time_init;
+    }
+
+    // Getter method for time_finished
+    public int getTime_finished() {
+        return time_finished;
     }
 
     public void setTime_init(int time_init) {
@@ -124,6 +132,10 @@ public class Process implements Comparable {
 
         return false;
 
+    }
+
+    public double getTurnaroundTime() {
+        return TurnaroundTime;
     }
 
 }
