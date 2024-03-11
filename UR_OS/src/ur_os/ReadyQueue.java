@@ -19,13 +19,13 @@ public class ReadyQueue {
     public ReadyQueue(OS os) {
         this.os = os;
 
-        s = new SJF_P(os);
+        // s = new SJF_P(os);
 
         // s = new SJF_NP(os);
 
         // s = new FCFS(os);
 
-        // s = new RoundRobin(os,3);
+        s = new RoundRobin(os, 3);
     }
 
     public ReadyQueue(OS OS, Scheduler s) {

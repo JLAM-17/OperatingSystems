@@ -93,11 +93,11 @@ public class SystemOS implements Runnable {
 
     public void initSimulationsumrolled() {
         Process p;
-        p = new Process(0, 0, 2, 1, 3);
+        p = new Process(0, 0, 3, 1, 3);
         processes.add(p);
-        p = new Process(0, 2, 3, 1, 2);
+        p = new Process(2, 0, 4, 1, 2);
         processes.add(p);
-        p = new Process(0, 3, 2, 1, 1);
+        p = new Process(3, 0, 2, 1, 1);
         processes.add(p);
 
     }
@@ -189,7 +189,8 @@ public class SystemOS implements Runnable {
 
         // Calculation of stats here
         int numberProcesses = processes.size();
-        double idleCpuCycles = execution.stream().filter(element -> element == -1).count(); // counts the -1 in execution
+        double idleCpuCycles = execution.stream().filter(element -> element == -1).count(); // counts the -1 in
+                                                                                            // execution
         int totalCpuCycles = execution.size();
         int cpuBusyCycles = totalCpuCycles - (int) idleCpuCycles;
         double Throughput = (double) numberProcesses / cpuBusyCycles;
@@ -207,7 +208,7 @@ public class SystemOS implements Runnable {
             }
             waitingTimePerProcess.add(cyclesCont);
         }
-        
+
         int previousProcess = -1; // cpu starts idle
         int contextSwitches = 0;
 

@@ -15,7 +15,7 @@ public class RoundRobin extends Scheduler {
 
     RoundRobin(OS os) {
         super(os);
-        quantum = 5;
+        quantum = 2; // defult q
         executedCyclesInBurst = 0;
     }
 
@@ -31,37 +31,21 @@ public class RoundRobin extends Scheduler {
         }
 
         if (cpuEmpty) {
-            os.interrupt(InterruptType.SCHEDULER_RQ_TO_CPU, processes.getFirst());
+            Process first = processes.remove(0);
+            os.interrupt(InterruptType.SCHEDULER_RQ_TO_CPU, first);
             executedCyclesInBurst = 1;
-
-            if (this.os.cpu.p.getRemainingTimeInCurrentBurst() == 1) {
-                processes.removeFirst();
+        } else {
+            // cpu busy
+            System.out.println("executed cycles: " + executedCyclesInBurst);
+            if (executedCyclesInBurst < quantum) {
+                executedCyclesInBurst++;
+            } else {
+                os.interrupt(InterruptType.SCHEDULER_CPU_TO_RQ, processes.remove(0));
+                executedCyclesInBurst = 0;
             }
 
-            return;
         }
 
-        if (executedCyclesInBurst < quantum) {
-            executedCyclesInBurst++;
-
-            if (this.os.cpu.p.getRemainingTimeInCurrentBurst() == 1) {
-                processes.removeFirst();
-            }
-
-            return;
-        }
-
-        // we could avoid the overhead of the context switch if there is only one
-        // process
-        processes.removeFirst();
-
-        Process temp = null;
-        if (!processes.isEmpty()) {
-            temp = processes.getFirst();
-        }
-
-        os.interrupt(InterruptType.SCHEDULER_CPU_TO_RQ, temp);
-        executedCyclesInBurst = 1;
     }
 
     @Override
