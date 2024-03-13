@@ -258,6 +258,14 @@ public class SystemOS implements Runnable{
             System.out.print(num+" ");
         }
         System.out.println("");
+        
+        System.out.println("******Performance Indicators******");
+        System.out.println("Total execution cycles: "+clock);
+        System.out.println("CPU Utilization: "+this.calcCPUUtilization());
+        System.out.println("Throughput: "+this.calcThroughput());
+        System.out.println("Average Turnaround Time: "+this.calcTurnaroundTime());
+        System.out.println("Average Waiting Time: "+this.calcAvgWaitingTime());
+        System.out.println("Average Context Switches: "+this.calcAvgContextSwitches());
     }
     
     public void showProcesses(){
@@ -270,6 +278,40 @@ public class SystemOS implements Runnable{
         }
         
         System.out.println(sb.toString());
+    }
+    
+    
+    public double calcCPUUtilization(){
+       
+        
+        return 0;
+    }
+    
+    public double calcTurnaroundTime(){
+        
+        double tot = 0;
+        
+       
+        
+        return tot/processes.size();
+    }
+    
+    public double calcThroughput(){
+        return 0;
+    }
+    
+    public double calcAvgWaitingTime(){
+        double tot = 0;
+        
+        
+        return tot/processes.size();
+    }
+    
+    public double calcAvgContextSwitches(){
+        int cont = 1;
+        
+        
+        return cont / processes.size();
     }
     
     

@@ -96,6 +96,14 @@ public class Process implements Comparable{
         return state;
     }
 
+    public int getTime_finished() {
+        return time_finished;
+    }
+
+    public int getTotalExecutionTime(){
+        return pbl.getTotalExecutionTime();
+    }
+    
     public void setState(ProcessState state) {
         this.state = state;
     }
