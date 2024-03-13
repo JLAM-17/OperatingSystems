@@ -37,7 +37,8 @@ public class SystemOS implements Runnable{
         execution = new ArrayList();
         processes = new ArrayList();
         //initSimulationQueue();
-        initSimulationQueueSimple();
+        //initSimulationQueueSimple();
+        initSimulationQueueSimpler();
         showProcesses();
     }
     
@@ -83,6 +84,52 @@ public class SystemOS implements Runnable{
             }
             clock++;
         }
+        clock = 0;
+    }
+    
+    public void initSimulationQueueSimpler(){
+        
+        Process p = new Process(false);
+        ProcessBurst temp = new ProcessBurst(5,ProcessBurstType.CPU);    
+        p.addBurst(temp);
+        temp = new ProcessBurst(4,ProcessBurstType.IO);    
+        p.addBurst(temp);
+        temp = new ProcessBurst(3,ProcessBurstType.CPU);    
+        p.addBurst(temp);
+        p.setTime_init(0);
+        processes.add(p);
+        
+        
+        p = new Process(false);
+        temp = new ProcessBurst(3,ProcessBurstType.CPU);    
+        p.addBurst(temp);
+        temp = new ProcessBurst(5,ProcessBurstType.IO);    
+        p.addBurst(temp);
+        temp = new ProcessBurst(6,ProcessBurstType.CPU);    
+        p.addBurst(temp);
+        p.setTime_init(2);
+        processes.add(p);
+        
+        p = new Process(false);
+        temp = new ProcessBurst(7,ProcessBurstType.CPU);    
+        p.addBurst(temp);
+        temp = new ProcessBurst(3,ProcessBurstType.IO);    
+        p.addBurst(temp);
+        temp = new ProcessBurst(5,ProcessBurstType.CPU);    
+        p.addBurst(temp);
+        p.setTime_init(6);
+        processes.add(p);
+        
+        p = new Process(false);
+        temp = new ProcessBurst(4,ProcessBurstType.CPU);    
+        p.addBurst(temp);
+        temp = new ProcessBurst(3,ProcessBurstType.IO);    
+        p.addBurst(temp);
+        temp = new ProcessBurst(7,ProcessBurstType.CPU);    
+        p.addBurst(temp);
+        p.setTime_init(8);
+        processes.add(p);
+        
         clock = 0;
     }
     
@@ -132,15 +179,12 @@ public class SystemOS implements Runnable{
             }
             execution.add(tempID);
             
+            
             //Actualizar la CPU
-            cpu.update(); 
+            cpu.update();
             
             ///Actualizar la IO
             ioq.update();
-            
-            //REVISAR PROBLEMA DE DEPENDENCIA ENTRE IO Y CPU EN EL MISMO CICLO!!!
-            
-            
             
             //Las actualizaciones de CPU y IO pueden generar interrupciones que actualizan a cola de listos, cuando salen los procesos
             

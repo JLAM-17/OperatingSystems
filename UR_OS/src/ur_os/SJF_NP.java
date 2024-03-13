@@ -19,12 +19,13 @@ public class SJF_NP extends Scheduler{
     @Override
     public void getNext(boolean cpuEmpty) {
         
+        
     }
     
     @Override
-    public void newProcess(boolean cpuEmpty) {} //Non-preemtive
+    public void newProcess(boolean cpuEmpty) {} //It's empty because it is Non-preemptive
 
     @Override
-    public void IOReturningProcess(boolean cpuEmpty) {} //Non-preemtive
+    public void IOReturningProcess(boolean cpuEmpty) {} //It's empty because it is Non-preemptive
     
 }
