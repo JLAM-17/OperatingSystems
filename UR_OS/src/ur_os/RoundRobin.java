@@ -11,10 +11,12 @@ package ur_os;
 public class RoundRobin extends Scheduler{
 
     int q;
+    int cont;
     
     RoundRobin(OS os){
         super(os);
         q = 5;
+        cont=0;
     }
     
     RoundRobin(OS os, int q){
@@ -24,8 +26,10 @@ public class RoundRobin extends Scheduler{
     
    
     @Override
-    public Process getNext(boolean cpuBusy) {
-        return null;
+    public void getNext(boolean cpuBusy) {
+        
+        
+        
     }
     
 }

@@ -22,11 +22,11 @@ public abstract class Scheduler {
         processes = new LinkedList();
     }
 
-    public Process getNext(){
-        return getNext(false);
+    public void getNext(){
+        getNext(false);
     }
     
-    public abstract Process getNext(boolean cpuBusy);
+    public abstract void getNext(boolean cpuBusy);
     
     public void addProcess(Process p){
         processes.add(p);
@@ -34,9 +34,7 @@ public abstract class Scheduler {
     
     public void update(){
         if(processes.size()> 0){
-            Process p = this.getNext();
-            if(p != null)
-                os.interrupt(InterruptType.SCHEDULER_TO_CPU, p);
+            getNext(os.isCPUEmpty());
         }
     }
     

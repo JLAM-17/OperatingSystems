@@ -30,6 +30,10 @@ public class CPU {
         p.setState(ProcessState.CPU);
     }
     
+    public Process getProcess(){
+        return p;
+    }
+    
     public boolean isEmpty(){
         return p == null;
     }
@@ -51,9 +55,13 @@ public class CPU {
     }
     
     public void removeProcess(){
-        
         p = null;
-
+    }
+    
+    public Process extractProcess(){
+        Process temp = p;
+        p = null;
+        return temp;
     }
     
     public String toString(){

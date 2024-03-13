@@ -51,14 +51,16 @@ public class OS {
             break;
             
             case SCHEDULER_TO_RQ:
-                
                 //When the scheduler is preemptive and will send the current process in CPU to the Ready Queue
+                Process temp = cpu.extractProcess();
+                rq.addProcess(temp);
+                cpu.addProcess(p);
+                
             break;
             
             case SCHEDULER_TO_CPU:
                 //When the scheduler defined which process will go to CPU
                 cpu.addProcess(p);
-                p.setState(ProcessState.CPU);
                 
             break;
             

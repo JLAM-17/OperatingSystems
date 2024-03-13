@@ -20,12 +20,13 @@ public class SystemOS implements Runnable{
     private static final int MAX_SIM_CYCLES = 1000;
     private static final int MAX_SIM_PROC_CREATION_TIME = 50;
     private static final double PROB_PROC_CREATION = 0.1;
-    private static Random r = new Random(1234);
+    private static Random r = new Random(1235);
     private OS os;
     private CPU cpu;
     private IOQueue ioq;
     
     protected ArrayList<Process> processes;
+    ArrayList<Integer> execution;
 
     public SystemOS() {
         cpu = new CPU();
@@ -33,7 +34,7 @@ public class SystemOS implements Runnable{
         os = new OS(this, cpu, ioq);
         cpu.setOS(os);
         ioq.setOS(os);
-        
+        execution = new ArrayList();
         processes = new ArrayList();
         initSimulationQueue();
         //initSimulationQueueSimple();
@@ -106,6 +107,8 @@ public class SystemOS implements Runnable{
         System.out.println("******SIMULATION START******");
         
         int i=0;
+        Process temp_exec;
+        int tempID;
         while(!isSimulationFinished() && i < MAX_SIM_CYCLES){//MAX_SIM_CYCLES is the maximum simulation time, to avoid infinite loops
             System.out.println("******Clock: "+i+"******");
 
@@ -132,10 +135,22 @@ public class SystemOS implements Runnable{
             
             i++;
             clock++;
-          
+            temp_exec = cpu.getProcess();
+            if(temp_exec == null){
+                tempID = -1;
+            }else{
+                tempID = temp_exec.getPid();
+            }
+            execution.add(tempID);
         }
         System.out.println("******SIMULATION FINISHES******");
-        os.showProcesses();
+        //os.showProcesses();
+        
+        System.out.println("******Process Execution******");
+        for (Integer num : execution) {
+            System.out.print(num+" ");
+        }
+        System.out.println("");
     }
     
     public void showProcesses(){

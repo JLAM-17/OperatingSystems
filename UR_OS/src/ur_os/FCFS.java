@@ -17,14 +17,13 @@ public class FCFS extends Scheduler{
     
    
     @Override
-    public Process getNext(boolean cpuBusy) {
+    public void getNext(boolean cpuBusy) {
         if(!processes.isEmpty() && os.isCPUEmpty())
         {        
             Process p = processes.get(0);
             processes.remove();
-            return p;
+            os.interrupt(InterruptType.SCHEDULER_TO_CPU, p);
         }
-        return null;
     }
     
 }
