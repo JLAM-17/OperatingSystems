@@ -8,23 +8,22 @@ package ur_os;
  *
  * @author prestamour
  */
-public class RoundRobin extends Scheduler{
+public class FCFS extends Scheduler{
 
-    int q;
     
-    RoundRobin(OS os){
+    FCFS(OS os){
         super(os);
-        q = 5;
-    }
-    
-    RoundRobin(OS os, int q){
-        this(os);
-        this.q = q;
     }
     
    
     @Override
     public Process getNext(boolean cpuBusy) {
+        if(!processes.isEmpty())
+        {        
+            Process p = processes.get(0);
+            processes.remove();
+            return p;
+        }
         return null;
     }
     

@@ -5,6 +5,7 @@
 package ur_os;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  *
@@ -12,19 +13,37 @@ import java.util.ArrayList;
  */
 public abstract class Scheduler {
     
-    protected ArrayList<Process> processes;
+    OS os;
+    protected LinkedList<Process> processes;
     
-    public Scheduler(){
-        processes = new ArrayList();
+    
+    public Scheduler(OS os){
+        this.os = os;
+        processes = new LinkedList();
     }
 
-    public abstract Process getNext();
+    public Process getNext(){
+        return getNext(false);
+    }
+    
+    public abstract Process getNext(boolean cpuBusy);
     
     public void addProcess(Process p){
         processes.add(p);
     }
     
+    public void update(){
+        if(processes.size()> 0){
+            Process p = this.getNext();
+            os.interrupt(InterruptType.SCHEDULER_TO_CPU, p);
+        }
+    }
     
+    public Process removeProcess(Process p){
+        Process temp = p;
+        processes.remove(p);
+        return temp;
+    }
     
     public String toString(){
         StringBuffer sb = new StringBuffer();

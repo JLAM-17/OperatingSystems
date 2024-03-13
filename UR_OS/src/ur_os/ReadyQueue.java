@@ -14,18 +14,29 @@ import java.util.ArrayList;
 public class ReadyQueue {
     
     Scheduler s;
+    OS os;
     
     
-    public ReadyQueue(){
-        s = new RoundRobin();
+    public ReadyQueue(OS os){
+        this.os = os;
+        s = new FCFS(os);
     }
     
-    public ReadyQueue(Scheduler s){
+    public ReadyQueue(OS OS, Scheduler s){
+        this.os = os;
         this.s = s;
     }
     
     public void addProcess(Process p){
         s.addProcess(p);
+    }
+    
+    public Process removeProcess(Process p){
+        return s.removeProcess(p);
+    }
+    
+    public void update(){
+        s.update();
     }
         
     public String toString(){
