@@ -15,7 +15,6 @@ public class FCFS extends Scheduler{
         super(os);
     }
     
-   
     @Override
     public void getNext(boolean cpuEmpty) {
         if(!processes.isEmpty() && cpuEmpty)

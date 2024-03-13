@@ -5,6 +5,8 @@
  */
 package ur_os;
 
+import static ur_os.InterruptType.SCHEDULER_CPU_TO_RQ;
+
 
 /**
  *
@@ -31,6 +33,10 @@ public class OS {
     
     public boolean isCPUEmpty(){
         return cpu.isEmpty();
+    }
+    
+    public Process getProcessInCPU(){
+        return cpu.getProcess();
     }
     
     public void interrupt(InterruptType t, Process p){
@@ -60,6 +66,7 @@ public class OS {
                 
             break;
             
+            
             case SCHEDULER_RQ_TO_CPU:
                 //When the scheduler defined which process will go to CPU
                 cpu.addProcess(p);
@@ -71,6 +78,9 @@ public class OS {
         
     }
     
+    public void removeProcessFromCPU(){
+        cpu.removeProcess();
+    }
     
     public void create_process(){
         rq.addProcess(new Process(process_count++, system.getTime()));

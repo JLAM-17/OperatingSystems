@@ -24,18 +24,23 @@ public class RoundRobin extends Scheduler{
         this.q = q;
     }
     
+
+    
+    void resetCounter(){
+        cont=0;
+    }
    
     @Override
     public void getNext(boolean cpuEmpty) {
         
         
-        
     }
     
+    
     @Override
-    public void newProcess(boolean cpuEmpty) {} //It's empty because it is Non-preemptive
+    public void newProcess(boolean cpuEmpty) {} //Non-preemtive in this event
 
     @Override
-    public void IOReturningProcess(boolean cpuEmpty) {} //It's empty because it is Non-preemptive
+    public void IOReturningProcess(boolean cpuEmpty) {} //Non-preemtive in this event
     
 }
