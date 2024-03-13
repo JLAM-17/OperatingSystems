@@ -66,13 +66,28 @@ public class ProcessBurstList {
         return this.bursts;
     }
     
+    public void generateSimpleBursts(){
+        
+        ProcessBurst temp = new ProcessBurst(5,ProcessBurstType.CPU);    
+        addBurst(temp);
+        temp = new ProcessBurst(5,ProcessBurstType.IO);    
+        addBurst(temp);
+        temp = new ProcessBurst(5,ProcessBurstType.CPU);    
+        addBurst(temp);
+        
+    }
+    
     public void generateRandomBursts(int numCPUBursts, int maxCPUCycles, int maxIOCycles){
     
         
         if(numCPUBursts > 0){
-            ProcessBurst temp = new ProcessBurst(r.nextInt(maxCPUCycles),ProcessBurstType.CPU);    
-            addBurst(temp);
             int temp_val;
+            do{
+                temp_val = r.nextInt(maxCPUCycles);
+            }while(temp_val == 0);
+            
+            ProcessBurst temp = new ProcessBurst(temp_val,ProcessBurstType.CPU);    
+            addBurst(temp);
             for (int i = 1; i < numCPUBursts; i++) {
                 do{
                     temp_val = r.nextInt(maxIOCycles);
@@ -101,7 +116,6 @@ public class ProcessBurstList {
        sb.append(this.currentBurst);
        sb.append("\n");
        sb.append("Burst list: ");
-       sb.append("\n");
         for (ProcessBurst burst : bursts) {
             sb.append(burst.toString());
             sb.append("\t");

@@ -49,10 +49,23 @@ public class IOQueue {
     }
     
     public void removeProcess(Process p){
-    
         processes.remove(p); //The process is found thanks to the equals() method
+    }
+    
+    public String toString(){
         
+        if(!processes.isEmpty()){
+            StringBuilder sb = new StringBuilder();
+            sb.append("IO: ");
+            for (Process p : processes) {
+                sb.append(p);
+                sb.append("\n");
+            }
+
+            return sb.toString();
         
+        }else
+            return "IO: Empty";
     }
     
 }

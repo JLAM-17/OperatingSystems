@@ -35,7 +35,8 @@ public abstract class Scheduler {
     public void update(){
         if(processes.size()> 0){
             Process p = this.getNext();
-            os.interrupt(InterruptType.SCHEDULER_TO_CPU, p);
+            if(p != null)
+                os.interrupt(InterruptType.SCHEDULER_TO_CPU, p);
         }
     }
     
@@ -55,4 +56,6 @@ public abstract class Scheduler {
         
         return sb.toString();
     }
+    
+     
 }

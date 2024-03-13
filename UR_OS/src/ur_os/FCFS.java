@@ -18,7 +18,7 @@ public class FCFS extends Scheduler{
    
     @Override
     public Process getNext(boolean cpuBusy) {
-        if(!processes.isEmpty())
+        if(!processes.isEmpty() && os.isCPUEmpty())
         {        
             Process p = processes.get(0);
             processes.remove();

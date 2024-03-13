@@ -17,7 +17,8 @@ import java.util.Set;
 public class SystemOS implements Runnable{
     
     private static int clock = 0;
-    private static final int MAX_SIM_CYCLES = 100;
+    private static final int MAX_SIM_CYCLES = 1000;
+    private static final int MAX_SIM_PROC_CREATION_TIME = 50;
     private static final double PROB_PROC_CREATION = 0.1;
     private static Random r = new Random(1234);
     private OS os;
@@ -34,8 +35,8 @@ public class SystemOS implements Runnable{
         ioq.setOS(os);
         
         processes = new ArrayList();
-        //initSimulationQueue();
-        initSimulationQueueSimple();
+        initSimulationQueue();
+        //initSimulationQueueSimple();
         showProcesses();
     }
     
@@ -58,7 +59,7 @@ public class SystemOS implements Runnable{
     public void initSimulationQueue(){
         double tp;
         Process p;
-        for (int i = 0; i < MAX_SIM_CYCLES; i++) {
+        for (int i = 0; i < MAX_SIM_PROC_CREATION_TIME; i++) {
             tp = r.nextDouble();
             if(PROB_PROC_CREATION >= tp){
                 p = new Process();
@@ -73,8 +74,8 @@ public class SystemOS implements Runnable{
     public void initSimulationQueueSimple(){
         Process p;
         int cont = 0;
-        for (int i = 0; i < MAX_SIM_CYCLES/2; i++) {
-            if(i % 10 == 0){
+        for (int i = 0; i < MAX_SIM_PROC_CREATION_TIME; i++) {
+            if(i % 4 == 0){
                 p = new Process(cont++,-1);
                 p.setTime_init(clock);
                 processes.add(p);
@@ -84,6 +85,19 @@ public class SystemOS implements Runnable{
         clock = 0;
     }
     
+    public boolean isSimulationFinished(){
+        
+        boolean finished = true;
+        
+        for (Process p : processes) {
+            finished = finished && p.isFinished();
+        }
+        
+        return finished;
+    
+    }
+    
+    
     @Override
     public void run() {
         double tp;
@@ -91,7 +105,8 @@ public class SystemOS implements Runnable{
         
         System.out.println("******SIMULATION START******");
         
-        for (int i = 0; i < MAX_SIM_CYCLES; i++) {
+        int i=0;
+        while(!isSimulationFinished() && i < MAX_SIM_CYCLES){//MAX_SIM_CYCLES is the maximum simulation time, to avoid infinite loops
             System.out.println("******Clock: "+i+"******");
 
             //Crear procesos, si aplica en el ciclo actual
@@ -113,14 +128,11 @@ public class SystemOS implements Runnable{
             
             
             System.out.println(cpu);
-            /*
-            System.out.println(cpu);
-            if(!cpu.isEmpty())
-                if(cpu.advanceBurst())
-                    System.out.println("CPU Burst finished");
-
-            */
+            System.out.println(ioq);
+            
+            i++;
             clock++;
+          
         }
         System.out.println("******SIMULATION FINISHES******");
         os.showProcesses();

@@ -26,6 +26,7 @@ public class Process implements Comparable{
         time_finished = -1;
         pbl = new ProcessBurstList();
         pbl.generateRandomBursts(NUM_CPU_CYCLES, MAX_CPU_CYCLES, MAX_IO_CYCLES);
+        //pbl.generateSimpleBursts(); //Generates process with 3 bursts (CPU, IO, CPU) with 5 cycles each
         state = ProcessState.NEW;
     }
     
