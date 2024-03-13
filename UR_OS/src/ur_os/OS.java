@@ -5,6 +5,9 @@
  */
 package ur_os;
 
+import java.util.HashSet;
+import java.util.Set;
+
 
 /**
  *
@@ -42,6 +45,7 @@ public class OS {
                     p.setState(ProcessState.FINISHED);
                     p.setTime_finished(system.getTime());
                 }else{
+                    p.setState(ProcessState.NEW_IO);
                     ioq.addProcess(p);
                 }
             break;

@@ -33,17 +33,22 @@ public class IOQueue {
     
     public void addProcess(Process p){
         processes.add(p);
-        p.setState(ProcessState.IO);
+        if(p.getState() != ProcessState.NEW_IO)
+            p.setState(ProcessState.IO);
         
     }
     
     public void update(){
         Process temp;
         for (int i=0; i< processes.size(); i++) {
-            if(processes.get(i).advanceBurst()){//If the process finishes the current burst
-                temp = processes.get(i);
-                processes.remove(processes.get(i));
-                os.interrupt(InterruptType.IO, temp);
+            if(processes.get(i).getState() != ProcessState.NEW_IO){
+                if(processes.get(i).advanceBurst()){//If the process finishes the current burst
+                    temp = processes.get(i);
+                    processes.remove(processes.get(i));
+                    os.interrupt(InterruptType.IO, temp);
+                }
+            }else{
+                processes.get(i).setState(ProcessState.IO);
             }
         }
     }

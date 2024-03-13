@@ -17,7 +17,7 @@ public class SJF_P extends Scheduler{
     
     @Override
     public void newProcess(boolean cpuEmpty){// When a NEW process enters the queue, process in CPU, if any, is extracted to compete with the rest
-       
+        
     } 
 
     @Override

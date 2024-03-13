@@ -18,7 +18,7 @@ public class SJF_NP extends Scheduler{
    
     @Override
     public void getNext(boolean cpuEmpty) {
-       
+        
     }
     
     @Override

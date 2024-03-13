@@ -13,5 +13,6 @@ public enum ProcessState {
     READY,
     CPU,
     IO,
+    NEW_IO,
     FINISHED
 }

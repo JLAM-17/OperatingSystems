@@ -132,12 +132,15 @@ public class SystemOS implements Runnable{
             }
             execution.add(tempID);
             
-            
             //Actualizar la CPU
-            cpu.update();
+            cpu.update(); 
             
             ///Actualizar la IO
             ioq.update();
+            
+            //REVISAR PROBLEMA DE DEPENDENCIA ENTRE IO Y CPU EN EL MISMO CICLO!!!
+            
+            
             
             //Las actualizaciones de CPU y IO pueden generar interrupciones que actualizan a cola de listos, cuando salen los procesos
             
