@@ -22,6 +22,12 @@ public class Process {
         this.pid = pid;
         this.time_init = time_init;
     }
+    
+    public Process(Process p) {
+        this.pid = p.pid;
+        this.time_init = p.time_init;
+        //All info about bursts
+    }
 
     public int getPid() {
         return pid;

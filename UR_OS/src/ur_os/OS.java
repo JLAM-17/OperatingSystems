@@ -18,11 +18,20 @@ public class OS {
     public OS(SystemOS system){
         rq = new ReadyQueue();
         this.system = system;
+        
+        
     }
     
     public void create_process(){
         rq.addProcess(new Process(process_count++, system.getTime()));
     }
+    
+    public void create_process(Process p){
+        Process p2 = new Process(p);
+        p2.setPid(process_count++);
+        rq.addProcess(p2);
+    }
+    
     
     public void showProcesses(){
         System.out.println("Process list:");

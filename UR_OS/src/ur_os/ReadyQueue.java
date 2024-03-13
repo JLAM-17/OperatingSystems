@@ -13,26 +13,24 @@ import java.util.ArrayList;
  */
 public class ReadyQueue {
     
-    ArrayList<Process> processes;
+    Scheduler s;
     
     
     public ReadyQueue(){
-        processes =  new ArrayList();
+        s = new RoundRobin();
+    }
+    
+    public ReadyQueue(Scheduler s){
+        this.s = s;
     }
     
     public void addProcess(Process p){
-        processes.add(p);
+        s.addProcess(p);
     }
         
     public String toString(){
-        StringBuffer sb = new StringBuffer();
         
-        for (Process process : processes) {
-            sb.append(process);
-            sb.append("\n");
-        }
-        
-        return sb.toString();
+        return s.toString();
     }
     
 }
