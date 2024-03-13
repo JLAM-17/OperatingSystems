@@ -18,7 +18,7 @@ public class FCFS extends Scheduler{
    
     @Override
     public void getNext(boolean cpuEmpty) {
-        if(!processes.isEmpty() && !cpuEmpty)
+        if(!processes.isEmpty() && cpuEmpty)
         {        
             Process p = processes.get(0);
             processes.remove();
@@ -27,10 +27,10 @@ public class FCFS extends Scheduler{
     }
 
     @Override
-    public void newProcess(boolean cpuEmpty) {} //Non-preemtive
+    public void newProcess(boolean cpuEmpty) {} //Empty because it is Non-preemtive
 
     @Override
-    public void IOReturningProcess(boolean cpuEmpty) {} //Non-preemtive
+    public void IOReturningProcess(boolean cpuEmpty) {} //Empty because it is Non-preemtive
     
     
     
