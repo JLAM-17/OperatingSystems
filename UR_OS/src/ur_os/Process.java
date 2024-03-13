@@ -25,8 +25,8 @@ public class Process implements Comparable{
         time_init = 0;
         time_finished = -1;
         pbl = new ProcessBurstList();
-        //pbl.generateRandomBursts(NUM_CPU_CYCLES, MAX_CPU_CYCLES, MAX_IO_CYCLES);
-        pbl.generateSimpleBursts(); //Generates process with 3 bursts (CPU, IO, CPU) with 5 cycles each
+        pbl.generateRandomBursts(NUM_CPU_CYCLES, MAX_CPU_CYCLES, MAX_IO_CYCLES);
+        //pbl.generateSimpleBursts(); //Generates process with 3 bursts (CPU, IO, CPU) with 5 cycles each
         state = ProcessState.NEW;
     }
     
@@ -84,6 +84,14 @@ public class Process implements Comparable{
         this.state = state;
     }
         
+    
+    public int getRemainingTimeInCurrentBurst(){
+        return pbl.getRemainingTimeInCurrentBurst();
+    }
+    
+    public boolean isCurrentBurstCPU(){
+        return pbl.isCurrentBurstCPU();
+    }
     
     
     public String toString(){

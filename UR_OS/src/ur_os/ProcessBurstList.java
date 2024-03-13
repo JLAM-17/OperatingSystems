@@ -13,6 +13,7 @@ import java.util.Random;
  */
 public class ProcessBurstList {
     
+    private static final int BURSTS_SIMPLE_SIM = 6;
     ArrayList<ProcessBurst> bursts;
     Random r;
     int currentBurst;
@@ -66,16 +67,25 @@ public class ProcessBurstList {
         return this.bursts;
     }
     
+    public int getRemainingTimeInCurrentBurst(){
+        return bursts.get(currentBurst).getRemainingCycles();
+    }
+    
+    public boolean isCurrentBurstCPU(){
+        return bursts.get(currentBurst).getType() == ProcessBurstType.CPU;
+    }
+    
     public void generateSimpleBursts(){
         
-        ProcessBurst temp = new ProcessBurst(5,ProcessBurstType.CPU);    
+        ProcessBurst temp = new ProcessBurst(BURSTS_SIMPLE_SIM,ProcessBurstType.CPU);    
         addBurst(temp);
-        temp = new ProcessBurst(5,ProcessBurstType.IO);    
+        temp = new ProcessBurst(BURSTS_SIMPLE_SIM,ProcessBurstType.IO);    
         addBurst(temp);
-        temp = new ProcessBurst(5,ProcessBurstType.CPU);    
+        temp = new ProcessBurst(BURSTS_SIMPLE_SIM,ProcessBurstType.CPU);    
         addBurst(temp);
         
     }
+    
     
     public void generateRandomBursts(int numCPUBursts, int maxCPUCycles, int maxIOCycles){
     

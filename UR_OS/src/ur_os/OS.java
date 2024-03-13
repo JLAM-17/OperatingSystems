@@ -50,15 +50,17 @@ public class OS {
                 rq.addProcess(p);
             break;
             
-            case SCHEDULER_TO_RQ:
+            case SCHEDULER_CPU_TO_RQ:
                 //When the scheduler is preemptive and will send the current process in CPU to the Ready Queue
                 Process temp = cpu.extractProcess();
                 rq.addProcess(temp);
-                cpu.addProcess(p);
+                if(p != null){
+                    cpu.addProcess(p);
+                }
                 
             break;
             
-            case SCHEDULER_TO_CPU:
+            case SCHEDULER_RQ_TO_CPU:
                 //When the scheduler defined which process will go to CPU
                 cpu.addProcess(p);
                 
@@ -75,14 +77,7 @@ public class OS {
     }
     
     public void create_process(Process p){
-        /*Process p2 = new Process(p);
-        p.setPid(process_count);
-        p2.setPid(process_count++);
-        p2.setState(ProcessState.READY);
-        rq.addProcess(p2);*/
-        
         p.setPid(process_count++);
-        p.setState(ProcessState.READY);
         rq.addProcess(p);
     }
     

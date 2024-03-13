@@ -26,10 +26,16 @@ public class RoundRobin extends Scheduler{
     
    
     @Override
-    public void getNext(boolean cpuBusy) {
+    public void getNext(boolean cpuEmpty) {
         
         
         
     }
+    
+    @Override
+    public void newProcess(boolean cpuEmpty) {} //Non-preemtive in this event
+
+    @Override
+    public void IOReturningProcess(boolean cpuEmpty) {} //Non-preemtive in this event
     
 }

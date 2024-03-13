@@ -19,7 +19,13 @@ public class ReadyQueue {
     
     public ReadyQueue(OS os){
         this.os = os;
-        s = new FCFS(os);
+        
+        s = new SJF_P(os);
+        
+        //s = new SJF_NP(os);
+        
+        //s = new FCFS(os);
+        
         //s = new RoundRobin(os,3);
     }
     
@@ -30,7 +36,6 @@ public class ReadyQueue {
     
     public void addProcess(Process p){
         s.addProcess(p);
-        p.setState(ProcessState.READY);
     }
     
     public Process removeProcess(Process p){

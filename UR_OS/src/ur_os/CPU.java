@@ -43,15 +43,12 @@ public class CPU {
             advanceBurst();
     }
     
-    public boolean advanceBurst(){
-        boolean temp = p.advanceBurst();
-        if(temp){
+    public void advanceBurst(){
+        if(p.advanceBurst()){
             Process tempp = p;
             removeProcess();
             os.interrupt(InterruptType.CPU, tempp);
-        }    
-            
-        return temp;
+        }
     }
     
     public void removeProcess(){

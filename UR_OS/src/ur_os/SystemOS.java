@@ -36,8 +36,8 @@ public class SystemOS implements Runnable{
         ioq.setOS(os);
         execution = new ArrayList();
         processes = new ArrayList();
-        initSimulationQueue();
-        //initSimulationQueueSimple();
+        //initSimulationQueue();
+        initSimulationQueueSimple();
         showProcesses();
     }
     
@@ -111,13 +111,28 @@ public class SystemOS implements Runnable{
         int tempID;
         while(!isSimulationFinished() && i < MAX_SIM_CYCLES){//MAX_SIM_CYCLES is the maximum simulation time, to avoid infinite loops
             System.out.println("******Clock: "+i+"******");
+            System.out.println(cpu);
+            System.out.println(ioq);
 
             //Crear procesos, si aplica en el ciclo actual
             ps = getProcessAtI(i);
             for (Process p : ps) {
                 os.create_process(p);
+            } //If the scheduler is preemtive, this action will trigger the extraction from the CPU, is any process is there.
+            
+            //Actualizar el OS, quien va actualizar el Scheduler            
+            os.update();
+            //os.update() prepares the system for execution. It runs at the beginning of the cycle.
+            
+            temp_exec = cpu.getProcess();
+            if(temp_exec == null){
+                tempID = -1;
+            }else{
+                tempID = temp_exec.getPid();
             }
-                        
+            execution.add(tempID);
+            
+            
             //Actualizar la CPU
             cpu.update();
             
@@ -126,22 +141,12 @@ public class SystemOS implements Runnable{
             
             //Las actualizaciones de CPU y IO pueden generar interrupciones que actualizan a cola de listos, cuando salen los procesos
             
-            //Actualizar el OS, quien va actualizar el Scheduler            
-            os.update();
-            
-            
+            System.out.println("After the cycle: ");
             System.out.println(cpu);
             System.out.println(ioq);
             
             i++;
             clock++;
-            temp_exec = cpu.getProcess();
-            if(temp_exec == null){
-                tempID = -1;
-            }else{
-                tempID = temp_exec.getPid();
-            }
-            execution.add(tempID);
         }
         System.out.println("******SIMULATION FINISHES******");
         //os.showProcesses();

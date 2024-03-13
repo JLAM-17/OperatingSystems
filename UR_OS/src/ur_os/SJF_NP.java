@@ -8,30 +8,23 @@ package ur_os;
  *
  * @author prestamour
  */
-public class FCFS extends Scheduler{
+public class SJF_NP extends Scheduler{
 
     
-    FCFS(OS os){
+    SJF_NP(OS os){
         super(os);
     }
     
    
     @Override
     public void getNext(boolean cpuEmpty) {
-        if(!processes.isEmpty() && !cpuEmpty)
-        {        
-            Process p = processes.get(0);
-            processes.remove();
-            os.interrupt(InterruptType.SCHEDULER_RQ_TO_CPU, p);
-        }
+       
     }
-
+    
     @Override
     public void newProcess(boolean cpuEmpty) {} //Non-preemtive
 
     @Override
     public void IOReturningProcess(boolean cpuEmpty) {} //Non-preemtive
-    
-    
     
 }
