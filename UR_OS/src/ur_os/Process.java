@@ -18,6 +18,7 @@ public class Process implements Comparable {
     int time_finished;
     ProcessBurstList pbl;
     ProcessState state;
+    int currentScheduler;
 
     private double TurnaroundTime;
 
@@ -29,6 +30,19 @@ public class Process implements Comparable {
         pbl.generateRandomBursts(NUM_CPU_CYCLES, MAX_CPU_CYCLES, MAX_IO_CYCLES);
         // pbl.generateSimpleBursts(); //Generates process with 3 bursts (CPU, IO, CPU)
         // with 5 cycles each
+        state = ProcessState.NEW;
+        currentScheduler = 0;
+    }
+
+    public Process(boolean auto) {
+        pid = -1;
+        time_init = 0;
+        time_finished = -1;
+        pbl = new ProcessBurstList();
+        if(auto){
+            pbl.generateRandomBursts(NUM_CPU_CYCLES, MAX_CPU_CYCLES, MAX_IO_CYCLES);
+            //pbl.generateSimpleBursts(); //Generates process with 3 bursts (CPU, IO, CPU) with 5 cycles each
+        }
         state = ProcessState.NEW;
     }
 
@@ -65,6 +79,10 @@ public class Process implements Comparable {
     public void setTime_finished(int time_finished) {
         this.time_finished = time_finished;
         this.TurnaroundTime = time_finished - time_init;
+    }
+
+    public void addBurst(ProcessBurst pb){
+        pbl.addBurst(pb);
     }
 
     public int getPid() {
@@ -106,6 +124,22 @@ public class Process implements Comparable {
 
     public boolean isCurrentBurstCPU() {
         return pbl.isCurrentBurstCPU();
+    }
+
+    public ProcessBurstList getPbl() {
+        return pbl;
+    }
+
+    public void setPbl(ProcessBurstList pbl) {
+        this.pbl = pbl;
+    }
+
+    public int getCurrentScheduler() {
+        return currentScheduler;
+    }
+
+    public void setCurrentScheduler(int currentScheduler) {
+        this.currentScheduler = currentScheduler;
     }
 
     public String toString() {

@@ -11,7 +11,7 @@ package ur_os;
 public class RoundRobin extends Scheduler {
 
     int quantum;
-    int executedCyclesInBurst;
+    int executedCyclesInBurst;        
 
     RoundRobin(OS os) {
         super(os);
@@ -24,19 +24,27 @@ public class RoundRobin extends Scheduler {
         this.quantum = q;
     }
 
+    void resetCounter(){
+        executedCyclesInBurst = 0;
+    }
+    
     @Override
 
     public void getNext(boolean cpuEmpty) {
+        System.out.print("////////");
+        System.out.print(processes.size());
         if (processes.isEmpty()) {
             if (cpuEmpty) { // CPU is not empty but there are no processes in the ready queue
                 return;
             }
 
             executedCyclesInBurst++;
-            if (executedCyclesInBurst >= quantum) {
-                // os.interrupt(InterruptType.SCHEDULER_CPU_TO_RQ, os.cpu.getProcess());
-                executedCyclesInBurst = 1;
+            if (MFQParent == null){
+                if (executedCyclesInBurst >= quantum) {
+                    executedCyclesInBurst = 0;
+                }    
             }
+            
 
             return;
         }
@@ -47,13 +55,34 @@ public class RoundRobin extends Scheduler {
             executedCyclesInBurst = 1;
         } else {
             // cpu busy
+            // System.out.print("111111111111");
             if (executedCyclesInBurst < quantum) {
+                // System.out.print("22222222");
                 executedCyclesInBurst++;
-            } else {
-                os.interrupt(InterruptType.SCHEDULER_CPU_TO_RQ, processes.remove(0));
-                executedCyclesInBurst = 0;
+            } else {                
+                os.interrupt(InterruptType.SCHEDULER_CPU_TO_RQ, processes.remove(0));                            
+                executedCyclesInBurst = 1;
             }
         }
+        // System.out.print("\n");
+        // System.out.print(executedCyclesInBurst);
+    }    
+
+    @Override
+    public boolean isMFQQueueDowngraded(){
+        System.out.print("------------------\n");
+        System.out.print(executedCyclesInBurst);
+        if (executedCyclesInBurst >= quantum){
+            executedCyclesInBurst = 1;
+            return true;
+        } else {
+            return false;
+        }        
+    }
+
+    @Override
+    public Process getNextProcess(){
+        return processes.remove(0);
     }
 
     @Override
