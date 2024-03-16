@@ -19,7 +19,7 @@ import java.util.Set;
 public class SystemOS implements Runnable {
 
     private static int clock = 0;
-    private static final int MAX_SIM_CYCLES = 50;
+    private static final int MAX_SIM_CYCLES = 200;    
     private static final int MAX_SIM_PROC_CREATION_TIME = 50;
     private static final double PROB_PROC_CREATION = 0.1;
     private static Random r = new Random(1235);
@@ -42,8 +42,8 @@ public class SystemOS implements Runnable {
         processes = new ArrayList();
         // initSimulationQueue();
         // initSimulationQueueSimple();
-        initSimulationQueueSimpler();
-        // initSimulationQueueSimpler2();
+        // initSimulationQueueSimpler();
+        initSimulationQueueSimpler2();
         // initSimulationsumrolled();
         showProcesses();
     }

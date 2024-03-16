@@ -48,9 +48,6 @@ public class MFQ extends Scheduler{
         
         p.setState(ProcessState.READY); // If the process comes from the CPU, just add it to the list
         schedulers.get(p.getCurrentScheduler()).processes.add(p);
-        // System.out.print("ppppppppppppp\n");
-        // System.out.print(p.getPid());
-        // System.out.print(p.getCurrentScheduler());
     }
     
     void defineCurrentScheduler(){
@@ -76,7 +73,6 @@ public class MFQ extends Scheduler{
             if (cpuEmpty) {
                 return;
             } else {
-                // System.out.print("1111111111111111111111\n");
                 actualProcess = os.getProcessInCPU();
                 actualProcessScheduler = schedulers.get(actualProcess.getCurrentScheduler());
 
@@ -89,31 +85,24 @@ public class MFQ extends Scheduler{
             }
 
         } else {
-            System.out.print("BBBBBBBBBBBBBBBBBBBBB\n");
-            System.out.print(currentScheduler);
-            System.out.print(cpuEmpty);
             if (cpuEmpty){
                 actualProcessScheduler = schedulers.get(currentScheduler);
                 actualProcessScheduler.getNext(cpuEmpty);
 
-            } else {                
-                // System.out.print("222222222222222222222222\n");
-                // System.out.print("BBBBBBBBBBBBBBBBBBBBB\n");
-                // System.out.print(schedulers.size()-1);
+            } else {                                
+                actualProcess = os.getProcessInCPU();
+                actualProcessScheduler = schedulers.get(actualProcess.getCurrentScheduler());
                 if (currentScheduler != schedulers.size()-1){ // If is not the last queue
-                    // System.out.print("aaaaaaaaaaaaaa\n");
-                    actualProcess = os.getProcessInCPU();
-                    actualProcessScheduler = schedulers.get(actualProcess.getCurrentScheduler());
-                    System.out.print(actualProcess.getCurrentScheduler());
                     if (actualProcessScheduler.isMFQQueueDowngraded()){
                         actualProcess.setCurrentScheduler(actualProcess.getCurrentScheduler()+1);
                         
                         nextProcess = schedulers.get(currentScheduler).getNextProcess();
-                        System.out.print(nextProcess.currentScheduler);
                         os.interrupt(InterruptType.SCHEDULER_CPU_TO_RQ, nextProcess);
                     } else {
                         actualProcessScheduler.getNext(cpuEmpty);
                     }
+                } else {
+                    actualProcessScheduler.getNext(cpuEmpty);
                 }
             }
         }

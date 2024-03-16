@@ -55,17 +55,13 @@ public class RoundRobin extends Scheduler {
             executedCyclesInBurst = 1;
         } else {
             // cpu busy
-            // System.out.print("111111111111");
             if (executedCyclesInBurst < quantum) {
-                // System.out.print("22222222");
                 executedCyclesInBurst++;
             } else {                
                 os.interrupt(InterruptType.SCHEDULER_CPU_TO_RQ, processes.remove(0));                            
                 executedCyclesInBurst = 1;
             }
         }
-        // System.out.print("\n");
-        // System.out.print(executedCyclesInBurst);
     }    
 
     @Override
